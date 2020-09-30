@@ -1,0 +1,76 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Manage Subject
+{% endblock page_title %}
+{% block main_content %}
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-4 pb-5">
+              <a href="{% url 'add_subject' %}" class="btn btn-primary ">+Add Subject</a></td>
+            </div>
+          </div>
+            <div class="row">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title">Subject Details</h3>
+      
+                      <div class="card-tools">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                          <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+      
+                          <div class="input-group-append">
+                            <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive p-0">
+                      <table class="table table-hover text-nowrap">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Subject Name</th>
+                            <th>Course Name</th>
+                            <th>Course ID</th>
+                            <th>Staff Name</th>
+                            <th>Actions </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for subject in subjects %}
+                          <tr>
+                            <td>{{subject.id}}</td>
+                            <td>{{subject.subject_name}}</td>
+                            <td>{{subject.course_id.course_name}}</td>
+                            <td>{{subject.course_id.id}}</td>
+                            <td>{{subject.staff_id.first_name}} {{subject.staff_id.last_name}}</td>
+                            <td><a href="/edit_subject/{{ subject.id }}" class="btn btn-success ">Edit</a>
+                              <a class="confirm-delete btn btn-danger" href="/delete_subject/{{ subject.id }}" >Delete</a>
+                              {% block custom_js %}
+                              <script>
+                                  $(document).on('click', '.confirm-delete', function(){
+                                      return confirm('Are you sure you want to delete this?');
+                                  })
+                                </script>
+                              {% endblock custom_js %}
+                           </td>
+                             </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+                </div>
+              </div>
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- /.content -->
+{% endblock main_content %}
+

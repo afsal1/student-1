@@ -1,0 +1,87 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Manage Staff
+{% endblock page_title %}
+{% block main_content %}
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-4 pb-5">
+              <a href="{% url 'add_staff' %}" class="btn btn-primary ">+Add Staff</a></td>
+            </div>
+          </div>
+            <div class="row">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title">Staff Details</h3>
+      
+                      <div class="card-tools">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                          <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+      
+                          <div class="input-group-append">
+                            <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive p-0">
+                      <table class="table table-hover text-nowrap">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>Last Login</th>
+                            <th>Date Joined</th>
+                            <th>Actions </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for staff in staffs %}
+                          <tr>
+                            <td>{{staff.admin.id}}</td>
+                            <td>{{staff.admin.first_name}}</td>
+                            <td>{{staff.admin.last_name}}</td>
+                            <td>{{staff.admin.username}}</td>
+                            <td>{{staff.admin.email}}</td>
+                            <td>{{staff.address}}</td>
+                            <td>{{staff.admin.last_login}}</td>
+                            <td>{{staff.admin.date_joined}}</td>
+                            <td><a href="/edit_staff/{{ staff.admin.id }}" class="btn btn-success ">Edit</a>
+                              <a class="confirm-delete btn btn-danger" href="/delete_staff/{{ staff.admin.id }}" >Delete</a>
+                              {% block custom_js %}
+                              <script>
+                                  $(document).on('click', '.confirm-delete', function(){
+                                      return confirm('Are you sure you want to delete this?');
+                                  })
+                                </script>
+                              {% endblock custom_js %}
+
+                              <!-- <form action="{% url 'delete_staff' staff.admin.id %}" method="POST" onsubmit="window.ondelete()" style="display: inline;">
+                                {% csrf_token %}
+                              <button type="submit" class="btn btn-danger">Delete</button>
+                              </form> -->
+                            
+                             </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+                </div>
+              </div>
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- /.content -->
+{% endblock main_content %}
+
