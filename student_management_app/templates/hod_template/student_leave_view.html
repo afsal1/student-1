@@ -1,4 +1,5 @@
 {% extends 'hod_template/base_template.html' %}
+
 {% block page_title %}
 Student Apply For Leave
 {% endblock page_title %}
@@ -37,16 +38,46 @@ Student Apply For Leave
                                 <td>{{ leave.leave_meassage }}</td>
                                 <td>{{ leave.created_at }}</td>
                                 <td>
-                                    {% if leave.leave_status  == 0 %}
-                                    <a href="{% url 'student_approve_leave' leave_id=leave.id %}" class="btn btn-success " > Approve</a>
-                                    <a href="{% url 'student_disapprove_leave' leave_id=leave.id %}" class="btn btn-danger " > Rejected</a>
-                                    {% elif leave.leave_status  == 1 %}
-                                    <button class="btn btn-warning " disabled="disabled" data-toggle="modal" data-target="#reply_modal"> Approved</button>
+                                   
+                                
+                                    <!-- <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                       Approve/Reject
+                                      </button>
+                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item " href="{% url 'student_approve_leave' leave_id=leave.id %}" >Approve</a>
+                                       <a class="dropdown-item " href="{% url 'student_disapprove_leave' leave_id=leave.id %}">Reject</a>
+                                     </div> -->
+                                    
+                                     {% if leave.leave_status == 0 %}
+                                     <a class="btn btn-success " href="{% url 'student_approve_leave' leave_id=leave.id %}" > Approve</a>
+                                      <a class="btn btn-danger " href="{% url 'student_disapprove_leave' leave_id=leave.id %}"> Reject</a>
+                                    {% elif leave.leave_status == 1 %}
+                                    <a  class="btn btn-success btn-md disabled" aria-disabled="true"> Approved</a>
+                                    <a href="{% url 'student_disapprove_leave' leave_id=leave.id %}" class="btn btn-danger " > Reject</a>
                                     {% else %}
-                                    <button class="btn btn-danger " disabled="disabled" data-toggle="modal" data-target="#reply_modal"> Rejected</button>
-                                    {% endif %}
-                                </td>
+                                    <a class="btn btn-success " href="{% url 'student_approve_leave' leave_id=leave.id %}" > Approve</a>
+                                    <a class="btn btn-warning btn-md disabled" aria-disabled="true"> Rejected</a>
+                                 {% endif %}
+                              </td>
                             </tr>
+                            <!-- <label for="cars">Choose a car:</label>
+
+                            <select name="cars" id="cars">
+                              <option value="volvo">Volvo</option>
+                              <option value="saab">Saab</option>
+                              <option value="mercedes">Mercedes</option>
+                              <option value="audi">Audi</option>
+                            </select>  -->
+                            <!-- <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  Dropdown button
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                              </div> -->
 
                             {% endfor %}
 
@@ -57,5 +88,10 @@ Student Apply For Leave
             </div>
         </div>
     </section>
+    
 
     {% endblock main_content %}
+
+
+
+    

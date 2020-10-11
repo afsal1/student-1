@@ -373,23 +373,23 @@ def staff_feedback_message(request):
 
 
 
-def student_feedback_message(request):
-    feedbacks=FeedbackStudent.objects.all()
-    return render(request,"hod_template/student_feedback_template.html",{"feedbacks":feedbacks})
+# def student_feedback_message(request):
+#     feedbacks=FeedbackStudent.objects.all()
+#     return render(request,"hod_template/student_feedback_template.html",{"feedbacks":feedbacks})
 
 
-@csrf_exempt
-def student_feedback_message_replied(request):
-    feedback_id=request.POST.get("id")
-    feedback_message=request.POST.get("message")
+# @csrf_exempt
+# def student_feedback_message_replied(request):
+#     feedback_id=request.POST.get("id")
+#     feedback_message=request.POST.get("message")
 
-    try:
-        feedback=FeedbackStudent.objects.get(id=feedback_id)
-        feedback.feedback_reply=feedback_message
-        feedback.save()
-        return HttpResponse("True")
-    except:
-        return HttpResponse("False")
+#     try:
+#         feedback=FeedbackStudent.objects.get(id=feedback_id)
+#         feedback.feedback_reply=feedback_message
+#         feedback.save()
+#         return HttpResponse("True")
+#     except:
+#         return HttpResponse("False")
 
 
 
@@ -541,3 +541,24 @@ def delete_course(request,course_id):
 #     session = SessionYearModel.objects.get(id=session_id)
 #     session.delete()
 #     return redirect("manage_session")
+
+
+
+@csrf_exempt
+def check_email_exist(request):
+    email=request.POST.get("email")
+    user_obj=CustomUser.objects.filter(email=email).exists()
+    if user_obj:
+        return HttpResponse(True)
+    else:
+        return HttpResponse(False)
+
+
+@csrf_exempt
+def check_username_exist(request):
+    username=request.POST.get("username")
+    user_obj=CustomUser.objects.filter(username=username).exists()
+    if user_obj:
+        return HttpResponse(True)
+    else:
+        return HttpResponse(False)

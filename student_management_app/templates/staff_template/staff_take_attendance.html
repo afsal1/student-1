@@ -7,6 +7,10 @@ Take Attendance
   
     <section class="content">
         <div class="container-fluid">
+        
+            <div class="col-lg-12 pb-5">
+              <a href="{% url 'staff_update1_attendance' %}" class="btn btn-primary ">View Attendance History</a></td>
+            </div>
             <div class="row">
                 <div class="col-md-12">
                
@@ -66,7 +70,8 @@ Take Attendance
             </div>
        
         </div>
-        
+       
+        </div>
       </section>
 
 {% endblock main_content %}
@@ -88,13 +93,13 @@ Take Attendance
         .done(function(response){
             var json_data = JSON.parse(response);
             console.log(json_data);
-            var div_data="<div class='form-group' ><label>Attendance Date: </label><input type='date' name='attendance_date' id='attendance_date' class='form-control'></div><div class='form-group'><div class='row'>";
+            var div_data="<div class='form-group'><label>Attendance Date: </label><input type='date.now()' name='attendance_date' id='attendance_date' value={{ date1 }} class='form-control'></div><div class='form-group'><div class='row'>";
+
            
 
             for(key in json_data)
             {
               div_data+="<div class='col-lg-2'><div class='form-check' ><input type='checkbox' checked='checked' name='student_data[]' value='"+json_data[key]['id']+"'/><label class='form-check-label'>"+json_data[key]['name']+" </label></div></div> ";
-
             }
             div_data+="</div></div>";
             div_data+="<div class='form-group'>";
@@ -103,27 +108,14 @@ Take Attendance
 
 
             $("#student_data").html(div_data);
-
         }) 
         .fail(function(){
             alert("Error in Fetching Student.")
         });
-        $(document).ready(function() {
-            var date = new Date();
 
-            var day = date.getDate();
-            var month = date.getMonth() + 1;
-            var year = date.getFullYear();
-
-            if (month < 10) month = "0" + month;
-            if (day < 10) day = "0" + day;
-
-            var today = year + "-" + month + "-" + day;       
-            $("#attendance_date").attr("value", today);
-        });
-
-
+    
         $(document).on("click","#save_attendance",function(){
+
 
            $(this).attr("disabled","disabled")
            $(this).text("Saving Attendance Data..")
@@ -141,7 +133,7 @@ Take Attendance
               }
           }).get()
            
-
+          
            var attendance_date=$("#attendance_date").val();
            var subject_id=$("#subject").val();
            var session_year_id=$("#session_year").val();
@@ -156,20 +148,30 @@ Take Attendance
 
             })
             .done(function(response){
+
                 if(response == "OK"){
-                  alert("Attendance Save")
-                }
-                else{
+                
+                    alert(student_data)
+
+                  }
+                 
+
+               else
+                {
                   alert("Error in Saving Data")
                 }
+              
                 location.reload()
             }) 
+           
             .fail(function(){
                 alert("Error in Saving Student")
-            })
+         })
       })
-    })
-  })
+    
+   })
+
+})
 </script>
 {% endblock custom_js %} 
 

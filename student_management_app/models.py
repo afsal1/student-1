@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.utils import timezone
 
 # Create your models here.
 
@@ -73,7 +74,7 @@ class Students(models.Model):
 class Attendance(models.Model):
     id=models.AutoField(primary_key=True)
     subject_id=models.ForeignKey(Subjects,on_delete=models.DO_NOTHING)
-    attendance_date=models.DateField()
+    attendance_date=models.DateField(auto_now_add=True)
     created_at=models.DateField(auto_now_add=True)
     session_year_id=models.ForeignKey(SessionYearModel,on_delete=models.CASCADE)
     updated_at=models.DateTimeField(auto_now_add=True)

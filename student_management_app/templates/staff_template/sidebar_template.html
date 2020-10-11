@@ -4,7 +4,7 @@
     <a href="" class="brand-link">
       <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
            style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+      <span class="brand-text font-weight-light">ABC University</span>
     </a>
 
     <!-- Sidebar -->
@@ -28,7 +28,7 @@
           <li class="nav-item">
             {% url 'staff_home'  as staff_home %}
             <a href="{{ staff_home }}" class="nav-link {% if request.path == staff_home %} active {% endif %}">
-              <i class="nav-icon fas fa-th"></i>
+              <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Home
               </p>
@@ -36,8 +36,9 @@
         </li>
         <li class="nav-item">
           {% url 'staff_take_attendance'  as staff_take_attendance %}
-          <a href="{{ staff_take_attendance }}" class="nav-link {% if request.path == staff_take_attendance %} active {% endif %}">
-            <i class="nav-icon fas fa-th"></i>
+          {% url 'staff_update1_attendance'  as staff_update1_attendance %}
+          <a href="{{ staff_take_attendance }}" class="nav-link {% if request.path == staff_take_attendance %} active {% endif %}{% if request.path == staff_update1_attendance %} active {% endif %}">
+            <i class="nav-icon fas fa-calendar-plus"></i>
             <p>
               Take Attendance
             </p>
@@ -46,39 +47,60 @@
       <li class="nav-item">
         {% url 'staff_update_attendance'  as staff_update_attendance %}
         <a href="{{ staff_update_attendance }}" class="nav-link {% if request.path == staff_update_attendance %} active {% endif %}">
-          <i class="nav-icon fas fa-th"></i>
+          <i class="nav-icon fas fa-calendar-alt"></i>
           <p>
-            View Attendance
+            Update Attendance
           </p>
         </a>
     </li>
     <li class="nav-item">
       {% url 'staff_add_result'  as staff_add_result %}
       <a href="{{ staff_add_result }}" class="nav-link {% if request.path == staff_add_result %} active {% endif %}">
-        <i class="nav-icon fas fa-th"></i>
+        <i class="nav-icon fas fa-tasks"></i>
         <p>
           Add Result
         </p>
       </a>
   </li>
-    <li class="nav-item">
-      {% url 'staff_apply_leave'  as staff_apply_leave %}
-      <a href="{{ staff_apply_leave }}" class="nav-link {% if request.path == staff_apply_leave %} active {% endif %}">
-        <i class="nav-icon fas fa-th"></i>
-        <p>
-          Staff Leave
-        </p>
-      </a>
-  </li>
+ 
+  <li class="nav-item">
+    {% url 'staff_view_result'  as staff_view_result %}
+    <a href="{{ staff_view_result }}" class="nav-link {% if request.path == staff_view_result %} active {% endif %}">
+      <i class="nav-icon fas fa-envelope-open-text"></i>
+      <p>
+       View Students Result
+      </p>
+    </a>
+</li>
+<li class="nav-item">
+  {% url 'staff_apply_leave'  as staff_apply_leave %}
+  <a href="{{ staff_apply_leave }}" class="nav-link {% if request.path == staff_apply_leave %} active {% endif %}">
+    <i class="nav-icon fas fa-envelope-open-text"></i>
+    <p>
+       Leave Application
+    </p>
+  </a>
+</li>
     <li class="nav-item">
       {% url 'staff_feedback'  as staff_feedback %}
-      <a href="{{ staff_feedback }}" class="nav-link {% if request.path == staff_feedback %} active {% endif %}">
-        <i class="nav-icon fas fa-th"></i>
+      {% url 'student_feedback_message' as student_feedback_message %}
+      <a href="{{ staff_feedback }}" class="nav-link {% if request.path == staff_feedback %} active {% endif %}{% if request.path == student_feedback_message %} active {% endif %}">
+        <i class="nav-icon fas fa-comments"></i>
         <p>
-          Staff Feedback
+         Feedback Message
         </p>
       </a>
   </li>
+</li>
+<!-- <li class="nav-item">
+  {% url 'student_feedback_message'  as student_feedback_message %}
+  <a href="{{ student_feedback_message }}" class="nav-link {% if request.path == student_feedback_message %} active {% endif %}">
+    <i class="nav-icon fas fa-comments"></i>
+    <p>
+      Student Feedback
+    </p>
+  </a>
+</li> -->
 
         </ul>
               </nav>

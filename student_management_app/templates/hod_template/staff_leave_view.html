@@ -37,14 +37,29 @@ Staff Apply For Leave
                                 <td>{{ leave.leave_meassage }}</td>
                                 <td>{{ leave.created_at }}</td>
                                 <td>
-                                    {% if leave.leave_status  == 0 %}
+                                    <!--
                                     <a href="{% url 'staff_approve_leave' leave_id=leave.id %}" class="btn btn-success " > Approve</a>
                                     <a href="{% url 'staff_disapprove_leave' leave_id=leave.id %}" class="btn btn-danger " > Rejected</a>
-                                    {% elif leave.leave_status  == 1 %}
+                                    
                                     <button class="btn btn-warning " disabled="disabled" data-toggle="modal" data-target="#reply_modal"> Approved</button>
-                                    {% else %}
+                                 
                                     <button class="btn btn-danger " disabled="disabled" data-toggle="modal" data-target="#reply_modal"> Rejected</button>
-                                    {% endif %}
+                                     -->
+                                  
+                                    <!-- <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Approve/Reject
+                                       </button> -->
+                                       <!-- <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"> -->
+                                        {% if leave.leave_status == 0 %}
+                                       <a class="btn btn-success " href="{% url 'staff_approve_leave' leave_id=leave.id %}" > Approve</a>
+                                        <a class="btn btn-danger " href="{% url 'staff_disapprove_leave' leave_id=leave.id %}"> Reject</a>
+                                      {% elif leave.leave_status == 1 %}
+                                      <a  class="btn btn-success btn-md disabled" aria-disabled="true"> Approved</a>
+                                      <a href="{% url 'staff_disapprove_leave' leave_id=leave.id %}" class="btn btn-danger " > Reject</a>
+                                      {% else %}
+                                      <a class="btn btn-success " href="{% url 'staff_approve_leave' leave_id=leave.id %}" > Approve</a>
+                                      <a class="btn btn-warning btn-md disabled" aria-disabled="true"> Rejected</a>
+                                   {% endif %}
                                 </td>
                             </tr>
 
