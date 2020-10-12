@@ -4,7 +4,6 @@ from django.contrib.auth import authenticate,login,logout
 from student_management_app.EmailBackEnd import EmailBackEnd
 from django.contrib import messages
 import json
-import requests
 
 
 
