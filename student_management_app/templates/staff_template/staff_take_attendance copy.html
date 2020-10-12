@@ -81,10 +81,8 @@ Take Attendance
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
-            
-            <textarea>
-             
-            </textarea>
+            <p>Absentees List : </p>
+            <textarea class="form-control" rows="5" id="modal_text"></textarea>
             <button id="save_attendance" class="btn btn-info btn-block">Save Attendance </button>
           </div>
           <div class="modal-footer">
@@ -93,11 +91,9 @@ Take Attendance
         </div>
         
       </div>
-    </div>
-    
-       
-        </div>
-      </section>
+    </div>     
+  </div>
+</section>
 
 {% endblock main_content %}
 
@@ -128,19 +124,27 @@ Take Attendance
             }
             div_data+="</div></div>";
             div_data+="<div class='form-group'>";
-            div_data+="<button data-toggle='modal' data-target='#reply_modal' class='btn btn-success btn-block' type='button'>Save Attendance Data</button>";
+            div_data+="<button data-toggle='modal' data-target='#reply_modal' class='btn btn-success btn-block' id='save_data' type='button'>Save Attendance Data</button>";
             div_data+="</div>";
 
 
             $("#student_data").html(div_data);
+
         }) 
+
         .fail(function(){
+
             alert("Error in Fetching Student.")
+
         });
 
     
-        $(document).on("click","#save_attendance",function(){
+        
 
+    })
+   
+    
+    $(document).on("click","#save_attendance",function(){
 
            $(this).attr("disabled","disabled")
            $(this).text("Saving Attendance Data..")
@@ -156,9 +160,8 @@ Take Attendance
                 return {"id":$(this).val(),"status":0};
 
               }
-          }).get()
 
-           confirm_attendance();  
+          }).get()
 
 
            var attendance_date=$("#attendance_date").val();
@@ -178,14 +181,12 @@ Take Attendance
             .done(function(response){
 
                 if(response == "OK")
-                {
-                 
-                   
-
+                {   
+                  console.log("Ok")
                 }                
                else
                 {
-                    alert("Error in Saving Data")
+                   alert("Error Saving Student")
                 }
               
                location.reload()
@@ -193,48 +194,41 @@ Take Attendance
            
             .fail(function(){
                 alert("Error in Saving Student")
+            
          })
+    
       })
-    
-   })
-        function confirm_attendance(){
-          array_confirm = []
-            const btn =document.querySelectorAll(".attendance_confirm");
-            btn.forEach(data=>{
-                  
-              if($(data).prop("checked") == true){
-                }
-                else if($(data).prop("checked") == false){
-                  const data1 = data.dataset.fg
-                  array_confirm.push(data1)
-                
-                }
 
-          })
-
-            if (array_confirm.length == 0)
-            {
-              alert("Attendance Saving")
-            }
-            else{
-              if (confirm("Absentees List : "+array_confirm)) {
-                // Save it!
-                console.log('Thing was saved to the database.');
-              } else {
-                location.reload()
-                console.log('Thing was not saved to the database.');
-              }
-            }
+  $(document).on("click","#save_data",function(){
+      array_confirm = []
+        const btn =document.querySelectorAll(".attendance_confirm");
+        btn.forEach(data=>{
               
-          }
+          if($(data).prop("checked") == true){
+            }
+            else if($(data).prop("checked") == false){
+              const data1 = data.dataset.fg
+              array_confirm.push(data1)
+            
+            }
 
-    })
+      }) 
 
+
+      if (array_confirm.length == 0)
+        {
+          document.getElementById("modal_text").value =  "No Absentees"  
+        }
+        else{
+          document.getElementById("modal_text").value =  array_confirm.toString();   
+          console.log(array_confirm)        
+        } 
+
+           
     
+    })
+  })
+
 </script>
 
 {% endblock custom_js %} 
-
-
-
-
