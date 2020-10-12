@@ -85,8 +85,6 @@ WSGI_APPLICATION = 'student_management_system.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.mysql',
         'NAME' : 'student_management_system',
         'USER' : 'root',
@@ -95,18 +93,7 @@ DATABASES = {
         'PORT' : '3306'
     }
 }
-# DATABASES = {
-#     'default': {
-#         #'ENGINE': 'django.db.backends.sqlite3',
-#         #'NAME': BASE_DIR / 'db.sqlite3',
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME' : 'stu',
-#         'USER' : 'root',
-#         'PASSWORD' : '12345',
-#         'HOST' : 'localhost',
-#         'PORT' : '3306'
-#     }
-# }
+
 
 
 # Password validation
@@ -152,11 +139,3 @@ AUTHENTICATION_BACKENDS=['student_management_app.EmailBackEnd.EmailBackEnd']
 
 EMAIL_BACKEND="django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH=os.path.join(BASE_DIR,"sent_mails") 
-
-
-# EMAIL_HOST="smtp.gmail.com"
-# EMAIL_PORT=587
-# EMAIL_HOST_USER="afsalgafoor2000@gmail.com"
-# EMAIL_HOST_PASSWORD="A@12afsal"
-# EMAIL_USE_TLS=True
-# DEFAULT_FROM_EMAIL="Student Management System <afsalgafoor2000@gmail.com>"

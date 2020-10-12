@@ -40,8 +40,16 @@ def admin_home(request):
     return render(request,"hod_template/home_content.html",{"students_count":students_count,"staff_count":staff_count,"subject_count":subject_count,"course_count":course_count,"subject_count_list":subject_count_list,"course_name_list":course_name_list,"student_count_list_in_course":student_count_list_in_course,"student_count_list_in_subject":student_count_list_in_subject,"subject_list":subject_list})
 
 
+
+def manage_staff(request):
+    staffs=Staffs.objects.all()
+    return render(request,"hod_template/manage_staff_template.html",{"staffs" : staffs})
+
+
+
 def add_staff(request):
     return render(request,"hod_template/add_staff_template.html")
+
 
 
 def add_staff_save(request):
@@ -65,31 +73,61 @@ def add_staff_save(request):
             return HttpResponseRedirect(reverse("add_staff"))
 
 
-def add_course(request):
-    return render(request,"hod_template/add_course_template.html")
+
+def edit_staff(request,staff_id):
+    staff=Staffs.objects.get(admin=staff_id)
+    return render(request,"hod_template/edit_staff_template.html",{"staff" : staff, "id": staff_id})
 
 
-def add_course_save(request):
+
+def edit_staff_save(request):
     if request.method!="POST":
         return HttpResponse("method not allowed")
     else:
-        course=request.POST.get("course")
+        staff_id=request.POST.get("staff_id")
+        first_name=request.POST.get("first_name")
+        last_name=request.POST.get("last_name")
+        username=request.POST.get("username")
+        email=request.POST.get("email")
+        address=request.POST.get("address")
         try:
-            course_model=Courses(course_name=course)
-            course_model.save()
-            messages.success(request,"Successfully Added Course")
-            return HttpResponseRedirect(reverse("add_course"))
+            user=CustomUser.objects.get(id=staff_id)
+            user.first_name=first_name
+            user.last_name=last_name
+            user.username=username
+            user.email=email
+            user.save()
+
+            staff_model=Staffs.objects.get(admin=staff_id)
+            staff_model.address=address
+            staff_model.save()
+
+            messages.success(request,"Successfully Edited Staff")
+            return HttpResponseRedirect(reverse("edit_staff",kwargs={"staff_id":staff_id}))
         except:
-            messages.error(request,"Failed to Add Course")
-            return HttpResponseRedirect(reverse("add_course"))
+            messages.error(request,"Failed to Edit Staff")
+            return HttpResponseRedirect(reverse("edit_staff",kwargs={"staff_id":staff_id}))
+
+
+
+def delete_staff(request,staff_id):
+    staff=Staffs.objects.get(admin=staff_id)
+    staff.delete()
+    return redirect("manage_staff")
+
+
+
+def manage_student(request):
+    students=Students.objects.all()
+    return render(request,"hod_template/manage_student_template.html",{"students" : students})
 
 
 
 def add_student(request):
 
     form=AddStudentForm()
-   # sessions=SessionYearModel.objects.all()
     return render(request,"hod_template/add_student_template.html",{"form":form })
+
 
 
 def add_student_save(request):
@@ -131,91 +169,6 @@ def add_student_save(request):
 
 
 
-def add_subject(request):
-    courses=Courses.objects.all()
-    staffs=CustomUser.objects.filter(user_type=2)
-    return render(request,"hod_template/add_subject_template.html",{"staffs": staffs,"courses" :courses})
-
-
-
-
-def add_subject_save(request):
-    if request.method!="POST":
-        return HttpResponse("method not allowed")
-    else:
-        subject_name=request.POST.get("subject_name")
-        course_id=request.POST.get("course")
-        course=Courses.objects.get(id=course_id)
-        staff_id=request.POST.get("staff")
-        staff=CustomUser.objects.get(id=staff_id)
-        try:
-            subject=Subjects(subject_name=subject_name,course_id=course,staff_id=staff)
-            subject.save()
-            messages.success(request,"Successfully Added Subject")
-            return HttpResponseRedirect(reverse("add_subject"))
-        except:
-            messages.error(request,"Failed to Add Student")
-            return HttpResponseRedirect(reverse("add_subject"))
-
-
-
-def manage_staff(request):
-    staffs=Staffs.objects.all()
-    return render(request,"hod_template/manage_staff_template.html",{"staffs" : staffs})
-
-
-
-def manage_student(request):
-    students=Students.objects.all()
-    return render(request,"hod_template/manage_student_template.html",{"students" : students})
-
-
-def manage_course(request):
-    courses=Courses.objects.all()
-    return render(request,"hod_template/manage_course_template.html",{"courses" : courses})
-
-
-def manage_subject(request):
-    subjects=Subjects.objects.all()
-    return render(request,"hod_template/manage_subject_template.html",{"subjects" : subjects})
-
-
-def edit_staff(request,staff_id):
-    staff=Staffs.objects.get(admin=staff_id)
-    return render(request,"hod_template/edit_staff_template.html",{"staff" : staff, "id": staff_id})
-
-
-def edit_staff_save(request):
-    if request.method!="POST":
-        return HttpResponse("method not allowed")
-    else:
-        staff_id=request.POST.get("staff_id")
-        first_name=request.POST.get("first_name")
-        last_name=request.POST.get("last_name")
-        username=request.POST.get("username")
-        email=request.POST.get("email")
-        address=request.POST.get("address")
-        try:
-            user=CustomUser.objects.get(id=staff_id)
-            user.first_name=first_name
-            user.last_name=last_name
-            user.username=username
-            user.email=email
-            user.save()
-
-            staff_model=Staffs.objects.get(admin=staff_id)
-            staff_model.address=address
-            staff_model.save()
-
-            messages.success(request,"Successfully Edited Staff")
-            return HttpResponseRedirect(reverse("edit_staff",kwargs={"staff_id":staff_id}))
-        except:
-            messages.error(request,"Failed to Edit Staff")
-            return HttpResponseRedirect(reverse("edit_staff",kwargs={"staff_id":staff_id}))
-
-
-
-
 def edit_student(request,student_id):
     request.session['student_id']=student_id
     student=Students.objects.get(admin=student_id)
@@ -228,10 +181,6 @@ def edit_student(request,student_id):
     form.fields['course'].initial=student.course_id.id
     form.fields['sex'].initial=student.gender
     form.fields['session_year_id'].initial=student.session_year_id.id
-
-
-    
-
 
     return render(request,"hod_template/edit_student_template.html",{"form": form,"id":student_id,"username":student.admin.username})
 
@@ -285,9 +234,44 @@ def edit_student_save(request):
 
 
 
+def delete_student(request,student_id):
+    students=Students.objects.get(admin=student_id)
+    students.delete()
+    return redirect("manage_student")
+
+
+
+def manage_course(request):
+    courses=Courses.objects.all()
+    return render(request,"hod_template/manage_course_template.html",{"courses" : courses})
+
+
+
+def add_course(request):
+    return render(request,"hod_template/add_course_template.html")
+
+
+
+def add_course_save(request):
+    if request.method!="POST":
+        return HttpResponse("method not allowed")
+    else:
+        course=request.POST.get("course")
+        try:
+            course_model=Courses(course_name=course)
+            course_model.save()
+            messages.success(request,"Successfully Added Course")
+            return HttpResponseRedirect(reverse("add_course"))
+        except:
+            messages.error(request,"Failed to Add Course")
+            return HttpResponseRedirect(reverse("add_course"))
+
+
+
 def edit_course(request,course_id):
     course=Courses.objects.get(id=course_id)
     return render(request,"hod_template/edit_course_template.html",{"course" : course,"id": course_id})
+
 
 
 def edit_course_save(request):
@@ -305,6 +289,46 @@ def edit_course_save(request):
         except:
             messages.error(request,"Failed to Add Course")
             return HttpResponseRedirect(reverse("edit_course",kwargs={"course_id":course_id}))
+
+
+
+def delete_course(request,course_id):
+    courses=Courses.objects.get(id=course_id)
+    courses.delete()
+    return redirect("manage_course")
+
+
+
+def manage_subject(request):
+    subjects=Subjects.objects.all()
+    return render(request,"hod_template/manage_subject_template.html",{"subjects" : subjects})
+
+
+
+def add_subject(request):
+    courses=Courses.objects.all()
+    staffs=CustomUser.objects.filter(user_type=2)
+    return render(request,"hod_template/add_subject_template.html",{"staffs": staffs,"courses" :courses})
+
+
+
+def add_subject_save(request):
+    if request.method!="POST":
+        return HttpResponse("method not allowed")
+    else:
+        subject_name=request.POST.get("subject_name")
+        course_id=request.POST.get("course")
+        course=Courses.objects.get(id=course_id)
+        staff_id=request.POST.get("staff")
+        staff=CustomUser.objects.get(id=staff_id)
+        try:
+            subject=Subjects(subject_name=subject_name,course_id=course,staff_id=staff)
+            subject.save()
+            messages.success(request,"Successfully Added Subject")
+            return HttpResponseRedirect(reverse("add_subject"))
+        except:
+            messages.error(request,"Failed to Add Student")
+            return HttpResponseRedirect(reverse("add_subject"))
 
 
 
@@ -340,10 +364,17 @@ def edit_subject_save(request):
             return HttpResponseRedirect(reverse("edit_subject",kwargs={"subject_id":subject_id}))
 
 
+
+def delete_subject(request,subject_id):
+    subjects=Subjects.objects.get(id=subject_id)
+    subjects.delete()
+    return redirect("manage_subject")
+
+
+
 def manage_session(request):
     session = SessionYearModel.objects.all()
     return render(request,"hod_template/manage_session_template.html",{"session":session})
-
 
 
 
@@ -372,27 +403,6 @@ def staff_feedback_message(request):
     return render(request,"hod_template/staff_feedback_template.html",{"feedbacks":feedbacks})
 
 
-
-# def student_feedback_message(request):
-#     feedbacks=FeedbackStudent.objects.all()
-#     return render(request,"hod_template/student_feedback_template.html",{"feedbacks":feedbacks})
-
-
-# @csrf_exempt
-# def student_feedback_message_replied(request):
-#     feedback_id=request.POST.get("id")
-#     feedback_message=request.POST.get("message")
-
-#     try:
-#         feedback=FeedbackStudent.objects.get(id=feedback_id)
-#         feedback.feedback_reply=feedback_message
-#         feedback.save()
-#         return HttpResponse("True")
-#     except:
-#         return HttpResponse("False")
-
-
-
 @csrf_exempt
 def staff_feedback_message_replied(request):
     feedback_id=request.POST.get("id")
@@ -405,6 +415,7 @@ def staff_feedback_message_replied(request):
         return HttpResponse("True")
     except:
         return HttpResponse("False")
+
 
 
 def student_leave_view(request):
@@ -420,6 +431,7 @@ def student_approve_leave(request,leave_id):
     return HttpResponseRedirect(reverse("student_leave_view"))
 
 
+
 def student_disapprove_leave(request,leave_id):
     leave=LeaveReportStudent.objects.get(id=leave_id)
     leave.leave_status=2
@@ -433,6 +445,7 @@ def staff_leave_view(request):
     return render(request,"hod_template/staff_leave_view.html",{"leaves":leaves})
 
 
+
 def staff_approve_leave(request,leave_id):
     leave=LeaveReportStaff.objects.get(id=leave_id)
     leave.leave_status=1
@@ -440,11 +453,13 @@ def staff_approve_leave(request,leave_id):
     return HttpResponseRedirect(reverse("staff_leave_view"))
 
 
+
 def staff_disapprove_leave(request,leave_id):
     leave=LeaveReportStaff.objects.get(id=leave_id)
     leave.leave_status=2
     leave.save()
     return HttpResponseRedirect(reverse("staff_leave_view"))
+
 
 
 def admin_view_attendance(request):
@@ -467,6 +482,7 @@ def admin_get_attendance_dates(request):
 
 
     return JsonResponse(json.dumps(attendance_obj),safe=False)
+
 
 
 @csrf_exempt
@@ -511,36 +527,6 @@ def admin_profile_save(request):
         except:
             messages.error(request,"Failed to Update Profile")
             return HttpResponseRedirect(reverse("admin_profile"))
-
-
-def delete_staff(request,staff_id):
-    staff=Staffs.objects.get(admin=staff_id)
-    staff.delete()
-    return redirect("manage_staff")
-
-
-def delete_student(request,student_id):
-    students=Students.objects.get(admin=student_id)
-    students.delete()
-    return redirect("manage_student")
-
-
-def delete_subject(request,subject_id):
-    subjects=Subjects.objects.get(id=subject_id)
-    subjects.delete()
-    return redirect("manage_subject")
-
-
-def delete_course(request,course_id):
-    courses=Courses.objects.get(id=course_id)
-    courses.delete()
-    return redirect("manage_course")
-
-
-# def delete_session(request, session_id):
-#     session = SessionYearModel.objects.get(id=session_id)
-#     session.delete()
-#     return redirect("manage_session")
 
 
 

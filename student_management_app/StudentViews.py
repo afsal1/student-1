@@ -35,9 +35,6 @@ def student_home(request):
 
 
 
-
-
-
 def student_profile(request):
     user=CustomUser.objects.get(id=request.user.id)
     student=Students.objects.get(admin=user)
@@ -137,15 +134,6 @@ def student_apply_leave_save(request):
 
 
 def student_feedback(request):
-    # subject_id = request.POST.get("subject")
-    # subject_model=Subjects.objects.filter(id=subject_id)
-    # staffs=Staffs.objects.filter(course_id=subject_model.course_id)
-    # # staffs=Staffs.objects.filter(admin=request.user.id)
-    # subjects=Subjects.objects.filter(staff_id=request.user.id)
-    
-
-
-
     student_id=Students.objects.get(admin=request.user.id)
     feedback_data=FeedbackStudent.objects.filter(student_id=student_id)
     return render(request,"student_template/student_feedback.html",{"feedback_data":feedback_data})
@@ -157,10 +145,6 @@ def student_feedback_save(request):
         return HttpResponseRedirect(reverse("student_feedback_save"))
     else:
         feedback_msg=request.POST.get("feedback_msg")
-        # subject_id = request.POST.get("subject") 
-        # subject_model=Subjects.objects.get(id=subject_id)
-        # staff_obj=Staffs.objects.filter(staff_id=subject_model.staff_id)
-
         student_obj=Students.objects.get(admin=request.user.id)
         try:
             feedback=FeedbackStudent(student_id=student_obj,feedback=feedback_msg,feedback_reply="")

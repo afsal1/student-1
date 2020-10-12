@@ -3,13 +3,14 @@
 Take Attendance
 {% endblock page_title %}
 {% block main_content %}
+
 {% load static %}
   
     <section class="content">
         <div class="container-fluid">
         
             <div class="col-lg-12 pb-5">
-              <a href="{% url 'staff_update1_attendance' %}" class="btn btn-primary ">View Attendance History</a></td>
+              <a href="{% url 'staff_take_attendance_history' %}" class="btn btn-primary ">View Attendance History</a></td>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -64,15 +65,35 @@ Take Attendance
                   <div id="student_data" class="card-footer">
 
                     </div>
-                  
                   </div>
             </div>
             </div>
        
         </div>
-       
+        
+    <div class="modal fade" id="reply_modal" role="dialog">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Attendance Save</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p>Absentees List : </p>
+            <textarea class="form-control" rows="5" id="modal_text"></textarea>
+            <button id="save_attendance" class="btn btn-info btn-block">Save Attendance </button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
         </div>
-      </section>
+        
+      </div>
+    </div>     
+  </div>
+</section>
 
 {% endblock main_content %}
 
@@ -99,23 +120,31 @@ Take Attendance
 
             for(key in json_data)
             {
-              div_data+="<div class='col-lg-2'><div class='form-check' ><input type='checkbox' checked='checked' name='student_data[]' value='"+json_data[key]['id']+"'/><label class='form-check-label'>"+json_data[key]['name']+" </label></div></div> ";
+              div_data+="<div class='col-lg-2'><div class='form-check' ><input type='checkbox' class='attendance_confirm' checked='checked' name='student_data[]' data-fg='"+json_data[key]['name']+"' value='"+json_data[key]['id']+"'/><label class='form-check-label dfg'>"+json_data[key]['name']+" </label></div></div> ";
             }
             div_data+="</div></div>";
             div_data+="<div class='form-group'>";
-            div_data+="<button id='save_attendance' class='btn btn-success btn-block' type='button'>Save Attendance Data</button>";
+            div_data+="<button data-toggle='modal' data-target='#reply_modal' class='btn btn-success btn-block' id='save_data' type='button'>Save Attendance Data</button>";
             div_data+="</div>";
 
 
             $("#student_data").html(div_data);
+
         }) 
+
         .fail(function(){
+
             alert("Error in Fetching Student.")
+
         });
 
     
-        $(document).on("click","#save_attendance",function(){
+        
 
+    })
+   
+    
+    $(document).on("click","#save_attendance",function(){
 
            $(this).attr("disabled","disabled")
            $(this).text("Saving Attendance Data..")
@@ -131,48 +160,75 @@ Take Attendance
                 return {"id":$(this).val(),"status":0};
 
               }
+
           }).get()
-           
-          
+
+
            var attendance_date=$("#attendance_date").val();
            var subject_id=$("#subject").val();
            var session_year_id=$("#session_year").val();
            console.log(student_data);
            student_data = JSON.stringify(student_data)
 
-
+          
             $.ajax({
               url:'{% url 'save_attendance_data' %}',
               type:'POST',
               data:{student_ids:student_data,attendance_date:attendance_date,subject_id:subject_id,session_year_id:session_year_id},
 
             })
+            
             .done(function(response){
 
-                if(response == "OK"){
-                
-                    alert(student_data)
-
-                  }
-                 
-
+                if(response == "OK")
+                {   
+                  console.log("Ok")
+                }                
                else
                 {
-                  alert("Error in Saving Data")
+                   alert("Error Saving Student")
                 }
               
-                location.reload()
+               location.reload()
             }) 
            
             .fail(function(){
                 alert("Error in Saving Student")
+            
          })
-      })
     
-   })
+      })
 
-})
+  $(document).on("click","#save_data",function(){
+      array_confirm = []
+        const btn =document.querySelectorAll(".attendance_confirm");
+        btn.forEach(data=>{
+              
+          if($(data).prop("checked") == true){
+            }
+            else if($(data).prop("checked") == false){
+              const data1 = data.dataset.fg
+              array_confirm.push(data1)
+            
+            }
+
+      }) 
+
+
+      if (array_confirm.length == 0)
+        {
+          document.getElementById("modal_text").value =  "No Absentees"  
+        }
+        else{
+          document.getElementById("modal_text").value =  array_confirm.toString();   
+          console.log(array_confirm)        
+        } 
+
+           
+    
+    })
+  })
+
 </script>
+
 {% endblock custom_js %} 
-
-

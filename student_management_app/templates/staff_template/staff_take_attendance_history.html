@@ -159,11 +159,6 @@ View Attendance History
 
             }
             div_data+="</div></div>";
-            // div_data+="<div class='form-group'>";
-            // div_data+="<button id='save_attendance' class='btn btn-success btn-block' type='button'>Save Attendance Data</button>";
-            // div_data+="</div>";
-
-
             $("#student_data").html(div_data);
 
         }) 
@@ -176,48 +171,6 @@ View Attendance History
 
         })
 
-      //  $(document).on("click","#save_attendance",function(){
-
-      //     $(this).attr("disabled","disabled")
-      //     $(this).text("Saving Attendance Data..")
-
-      //     var student_data=$("input[name='student_data[]']").map(function(){
-      //       if($(this).is(":checked"))
-      //       {
-
-      //         return {"id":$(this).val(),"status":1}; 
-      //       }
-      //       else
-      //       {
-      //         return {"id":$(this).val(),"status":0};
-
-      //       }
-      //     }).get()
-
-
-      //     var attendance_date=$("#attendance_date").val();
-      //     student_data = JSON.stringify(student_data)
-
-
-      //     $.ajax({
-      //       url:'{% url 'save_updateattendance_data' %}',
-      //       type:'POST',
-      //       data:{student_ids:student_data,attendance_date:attendance_date},
-
-      //     })
-      //     .done(function(response){
-      //         if(response == "OK"){
-      //           alert("Attendance Save")
-      //         }
-      //         else{
-      //           alert("Error in Saving Data")
-      //         }
-      //         location.reload()
-      //     }) 
-      //     .fail(function(){
-      //         alert("Error in Saving Student")
-      //     })
-      // })
 
   })
 </script>

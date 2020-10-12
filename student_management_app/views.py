@@ -1,12 +1,16 @@
 from django.shortcuts import render
-#from channels.auth import login
 from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib.auth import authenticate,login,logout
 from student_management_app.EmailBackEnd import EmailBackEnd
 from django.contrib import messages
 import json
 import requests
+
+
+
 # Create your views here.
+
+
 def showDemoPage(request):
     return render(request,"demo.html")
 

@@ -56,20 +56,15 @@ def staff_home(request):
         student_list_attendance_absent.append(attendance_absent_count)
     return render(request,"staff_template/staff_home_template.html",{"students_count":students_count,"attendance_count":attendance_count,"leave_count":leave_count,"subject_count":subject_count,"attendance_list":attendance_list,"subject_list":subject_list,"student_list":student_list,"present_list":student_list_attendance_present,"absent_list":student_list_attendance_absent})
 
+
+
 def staff_take_attendance(request):
     subjects=Subjects.objects.filter(staff_id=request.user.id)
     session_years = SessionYearModel.objects.all()
     today=date.today()
     date1= today.strftime("%d-%m-%Y")
     print(date1)
-    return render(request,"staff_template/staff_take_attendance copy.html",{"subjects":subjects,"session_years":session_years,"date1":date1}) 
-
-
-# def staff_view_attendance(request):
-#     subjects=Subjects.objects.all()
-#     session_year_id = SessionYearModel.objects.all()
-#     return render(request,"staff_template/staff_take123_attendance copy.html",{"subjects":subjects,"session_year_id":session_year_id})
-
+    return render(request,"staff_template/staff_take_attendance.html",{"subjects":subjects,"session_years":session_years,"date1":date1}) 
 
 
 
@@ -90,27 +85,6 @@ def get_students(request):
     return JsonResponse(json.dumps(list_data), content_type="application/json",safe=False)
 
 
-#return HttpResponse(students)
-#student_data=serializers.serialize("python",students)
-    
-
-
-@csrf_exempt
-def put_students(request):
-    subject_id = request.POST.get("subject") 
-    session_year = request.POST.get("session_year")
-
-    
-    subject_model=Subjects.objects.get(id=subject_id)
-    session_model=SessionYearModel.objects.get(id=session_year)
-    students=Students.objects.filter(course_id=subject_model.course_id,session_year_id=session_model)
-    list_data=[]
-
-    for student in students:
-        data_small={"id":student.admin.id,"name":student.admin.first_name+" "+student.admin.last_name}
-        list_data.append(data_small)
-    return JsonResponse(json.dumps(list_data), content_type="application/json",safe=False)
-
 
 
 @csrf_exempt
@@ -124,7 +98,6 @@ def save_attendance_data(request):
     subject_model=Subjects.objects.get(id=subject_id)
     session_year_model=SessionYearModel.objects.get(id=session_year_id)
     json_student=json.loads(student_ids)
-    #print(data[0]['id'])
 
 
     try:
@@ -144,44 +117,10 @@ def save_attendance_data(request):
 
 
 
-def staff_update1_attendance(request):
+def staff_take_attendance_history(request):
     subjects=Subjects.objects.filter(staff_id=request.user.id)
     session_year_id = SessionYearModel.objects.all()
-    return render(request, "staff_template/staff_update_attendance copy.html",{"subjects":subjects,"session_year_id":session_year_id})
-
-
-@csrf_exempt
-def put_attendance_dates(request):
-    subject=request.POST.get("subject")
-    session_year_id=request.POST.get("session_year_id")
-    subject_obj=Subjects.objects.get(id=subject)
-    session_year_obj=SessionYearModel.objects.get(id=session_year_id)
-    attendance=Attendance.objects.filter(subject_id=subject_obj,session_year_id=session_year_obj)
-    attendance_obj=[]
-    for attendance_single in attendance:
-        data={"id":attendance_single.id,"attendance_date":str(attendance_single.attendance_date),"session_year_id":attendance_single.session_year_id.id}
-        attendance_obj.append(data) 
-
-
-    return JsonResponse(json.dumps(attendance_obj),safe=False)
-
-
-@csrf_exempt
-def put_attendance_student(request):
-    attendance_date=request.POST.get("attendance_date")
-
-    attendance=Attendance.objects.get(id=attendance_date)
-
-    attendance_data=AttendanceReport.objects.filter(attendance_id=attendance)
-    list_data=[]
-
-    for student in attendance_data:
-        data_small={"id":student.student_id.admin.id,"name":student.student_id.admin.first_name+" "+student.student_id.admin.last_name,"status":student.status}
-        list_data.append(data_small)
-    return JsonResponse(json.dumps(list_data),content_type="application/json",safe=False)
-
-
-
+    return render(request, "staff_template/staff_take_attendance_history.html",{"subjects":subjects,"session_year_id":session_year_id})
 
 
 
@@ -298,6 +237,24 @@ def staff_feedback_save(request):
             return HttpResponseRedirect(reverse("staff_feedback"))
 
 
+def student_feedback_message(request):
+    feedbacks=FeedbackStudent.objects.all()
+    return render(request,"staff_template/student_feedback_template.html",{"feedbacks":feedbacks})
+
+
+@csrf_exempt
+def student_feedback_message_replied(request):
+    feedback_id=request.POST.get("id")
+    feedback_message=request.POST.get("message")
+
+    try:
+        feedback=FeedbackStudent.objects.get(id=feedback_id)
+        feedback.feedback_reply=feedback_message
+        feedback.save()
+        return HttpResponse("True")
+    except:
+        return HttpResponse("False")
+
 
 
 def staff_profile(request):
@@ -372,29 +329,10 @@ def save_student_result(request):
 
 
 
-def student_feedback_message(request):
-    feedbacks=FeedbackStudent.objects.all()
-    return render(request,"staff_template/student_feedback_template.html",{"feedbacks":feedbacks})
-
-
-@csrf_exempt
-def student_feedback_message_replied(request):
-    feedback_id=request.POST.get("id")
-    feedback_message=request.POST.get("message")
-
-    try:
-        feedback=FeedbackStudent.objects.get(id=feedback_id)
-        feedback.feedback_reply=feedback_message
-        feedback.save()
-        return HttpResponse("True")
-    except:
-        return HttpResponse("False")
-
-
-
 def staff_view_result(request):
     student=StudentResult.objects.all()
-    # studentresult=StudentResult.objects.filter(student_id=student.id)
     print(student)
-    return render(request,"staff_template/hi.html",{"student":student})
+    return render(request,"staff_template/staff_view_attendance.html",{"student":student})
+
+
 

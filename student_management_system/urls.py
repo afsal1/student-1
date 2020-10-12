@@ -69,19 +69,10 @@ urlpatterns = [
     path('delete_student/<student_id>', HodViews.delete_student,name="delete_student"),
     path('check_email_exist', HodViews.check_email_exist,name="check_email_exist"),
     path('check_username_exist', HodViews.check_username_exist,name="check_username_exist"),
-    
-#path('student_feedback_message', HodViews.student_feedback_message,name="student_feedback_message"),
-#path('student_feedback_message_replied', HodViews.student_feedback_message_replied,name="student_feedback_message_replied"),
-#path('staff_view_attendance', StaffViews.staff_view_attendance,name="staff_view_attendance")
 
 
 #staff urls
-    path('put_attendance_dates', StaffViews.put_attendance_dates,name="put_attendance_dates"),
-    path('put_attendance_student', StaffViews.put_attendance_student,name="put_attendance_student"),
-    path('staff_update1_attendance', StaffViews.staff_update1_attendance,name="staff_update1_attendance"),
-    path('put_students', StaffViews.put_students,name="put_students"),
-    path('student_feedback_message', StaffViews.student_feedback_message,name="student_feedback_message"),
-    path('student_feedback_message_replied', StaffViews.student_feedback_message_replied,name="student_feedback_message_replied"),
+
     path('staff_home', StaffViews.staff_home,name="staff_home"),
     path('staff_take_attendance', StaffViews.staff_take_attendance,name="staff_take_attendance"),
     path('staff_update_attendance', StaffViews.staff_update_attendance,name="staff_update_attendance"),
@@ -90,6 +81,7 @@ urlpatterns = [
     path('get_attendance_student', StaffViews.get_attendance_student,name="get_attendance_student"),
     path('save_attendance_data', StaffViews.save_attendance_data,name="save_attendance_data"),
     path('save_updateattendance_data', StaffViews.save_updateattendance_data,name="save_updateattendance_data"),
+    path('staff_take_attendance_history', StaffViews.staff_take_attendance_history,name="staff_take_attendance_history"),
     path('staff_apply_leave', StaffViews.staff_apply_leave,name="staff_apply_leave"),
     path('staff_apply_leave_save', StaffViews.staff_apply_leave_save,name="staff_apply_leave_save"),
     path('staff_feedback', StaffViews.staff_feedback,name="staff_feedback"),
@@ -99,6 +91,8 @@ urlpatterns = [
     path('staff_add_result', StaffViews.staff_add_result,name="staff_add_result"),
     path('save_student_result', StaffViews.save_student_result,name="save_student_result"),
     path('staff_view_result', StaffViews.staff_view_result,name="staff_view_result"),
+    path('student_feedback_message', StaffViews.student_feedback_message,name="student_feedback_message"),
+    path('student_feedback_message_replied', StaffViews.student_feedback_message_replied,name="student_feedback_message_replied"),
 
 
 
