@@ -12,7 +12,7 @@ class LoginCheckMiddleWare(MiddlewareMixin):
         user=request.user
         if user.is_authenticated:
             if user.user_type == "1":
-                if modulename == "student_management_app.HodViews":
+                if modulename == "student_management_app.hod_views":
                     pass
                 elif modulename == "student_management_app.views" or modulename == "django.views.static":
                     pass
@@ -20,7 +20,7 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                     return HttpResponseRedirect(reverse("admin_home"))
 
             elif user.user_type == "2":
-                if modulename == "student_management_app.StaffViews" :
+                if modulename == "student_management_app.staff_views" :
                     pass
                 elif modulename == "student_management_app.views" or modulename == "django.views.static":
                     pass
@@ -28,7 +28,7 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                    return HttpResponseRedirect(reverse("staff_home"))
 
             elif user.user_type == "3":
-                if modulename == "student_management_app.StudentViews" or modulename == "django.views.static":
+                if modulename == "student_management_app.student_views" or modulename == "django.views.static":
                     pass
                 elif modulename == "student_management_app.views":
                     pass
