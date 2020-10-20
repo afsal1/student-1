@@ -50,12 +50,12 @@ Password: admin
 
 *For Staff Login*
 
-Email: staff@gmail.com
-Password: staff
+Email: staff1@gmail.com
+Password: 1234
 
 *For Student Login*
 
-Email: student@gmail.com
-Password: student
+Email: student1@gmail.com
+Password: 1234
 
 
